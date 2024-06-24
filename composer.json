@@ -9,7 +9,8 @@
     "psr/http-message": "^1.0",
     "psr/http-server-handler": "^1.0",
     "psr/http-server-middleware": "^1.0",
-    "laminas/laminas-view": "^2.23"
+    "laminas/laminas-view": "^2.23",
+    "rugalib/ruga-std": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.6",
