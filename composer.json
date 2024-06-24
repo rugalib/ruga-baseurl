@@ -1,6 +1,6 @@
 {
-  "name": "rugalib/ruga-skeleton",
-  "description": "Template for rugalib components",
+  "name": "rugalib/ruga-baseurl",
+  "description": "Baseurl component for rugalib",
   "license": "AGPL-3.0-only",
   "homepage": "https://github.com/rugalib",
   "type": "library",
@@ -27,18 +27,18 @@
   ],
   "autoload": {
     "psr-4": {
-      "Ruga\\Skeleton\\": "src/"
+      "Ruga\\Baseurl\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Ruga\\Skeleton\\Test\\": "test/src"
+      "Ruga\\Baseurl\\Test\\": "test/src"
     }
   },
   "extra": {
     "laminas": {
-      "component": "Ruga\\Skeleton",
-      "config-provider": "Ruga\\Skeleton\\ConfigProvider"
+      "component": "Ruga\\Baseurl",
+      "config-provider": "Ruga\\Baseurl\\ConfigProvider"
     }
   }
 }
