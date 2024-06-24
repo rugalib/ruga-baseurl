@@ -22,7 +22,9 @@ class ConfigProvider
             'dependencies' => [
                 'services' => [],
                 'aliases' => [],
-                'factories' => [],
+                'factories' => [
+                    BaseurlMiddleware::class => Container\BaseurlMiddlewareFactory::class,
+                ],
                 'invokables' => [],
                 'delegators' => [],
             ],
