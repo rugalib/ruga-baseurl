@@ -8,13 +8,13 @@
     "php": "^7.4|^8.0|^8.1|^8.2",
     "psr/http-message": "^1.0",
     "psr/http-server-handler": "^1.0",
-    "psr/http-server-middleware": "^1.0"
+    "psr/http-server-middleware": "^1.0",
+    "laminas/laminas-view": "^2.23"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.6",
     "laminas/laminas-config-aggregator": "^1.7",
-    "laminas/laminas-servicemanager": "^3.11",
-    "rugalib/ruga-db": "^1.4"
+    "laminas/laminas-servicemanager": "^3.11"
   },
   "repositories": [
     {
@@ -22,6 +22,9 @@
       "url": "https://packages.rugalib.ch/"
     }
   ],
+  "provide": {
+    "mtymek/blast-base-url": "*"
+  },
   "authors": [
     {
       "name": "Roland Rusch",

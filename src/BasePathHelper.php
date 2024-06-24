@@ -20,36 +20,38 @@ declare(strict_types=1);
 
 namespace Ruga\Baseurl;
 
-use Laminas\ServiceManager\Factory\InvokableFactory;
-
-/**
- * ConfigProvider.
- *
- * @see    https://docs.mezzio.dev/mezzio/v3/features/container/config/
- */
-class ConfigProvider
+class BasePathHelper
 {
-    public function __invoke()
+    /** @var string */
+    private $basePath;
+    
+    
+    
+    /**
+     * BasePathHelper constructor.
+     *
+     * @param string $basePath
+     */
+    public function __construct($basePath = '')
     {
-        return [
-            'dependencies' => [
-                'services' => [],
-                'aliases' => [],
-                'factories' => [
-                    BasePathHelper::class => InvokableFactory::class,
-                    BaseurlMiddleware::class => Container\BaseurlMiddlewareFactory::class,
-                ],
-                'invokables' => [],
-                'delegators' => [],
-            ],
-            'view_helpers' => [
-                'aliases' => [
-                    'basePath' => BasePathHelper::class,
-                ],
-                'factories' => [
-                    BasePathHelper::class => Container\BasePathViewHelperFactory::class,
-                ],
-            ],
-        ];
+        $this->setBasePath($basePath);
     }
+    
+    
+    
+    /**
+     * @param string $basePath
+     */
+    public function setBasePath($basePath)
+    {
+        $this->basePath = rtrim($basePath, '/');
+    }
+    
+    
+    
+    public function __invoke($assetUrl = '')
+    {
+        return $this->basePath . '/' . ltrim($assetUrl, '/');
+    }
+    
 }

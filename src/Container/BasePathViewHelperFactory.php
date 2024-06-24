@@ -21,34 +21,15 @@ declare(strict_types=1);
 namespace Ruga\Baseurl\Container;
 
 use Psr\Container\ContainerInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Ruga\Baseurl\BasePathHelper;
-use Ruga\Baseurl\BaseurlMiddleware;
+use Ruga\Baseurl\BasePathViewHelper;
 
-class BaseurlMiddlewareFactory
+class BasePathViewHelperFactory
 {
-    public function __invoke(ContainerInterface $container): MiddlewareInterface
+    public function __invoke(ContainerInterface $container)
     {
-        $middleware = new BaseurlMiddleware();
-        
-        if ($container->has('\Mezzio\LaminasView\UrlHelper')) {
-            $middleware->setUrlHelper($container->get('\Mezzio\LaminasView\UrlHelper'));
-        }
-        
-        
-        if ($container->has('\Mezzio\Helper\UrlHelper')) {
-            $middleware->setUrlHelper($container->get('\Mezzio\Helper\UrlHelper'));
-        }
-        
-        if($container->has('\Laminas\View\Helper\BasePath')) {
-            $middleware->setBasePathHelper($container->get('\Laminas\View\Helper\BasePath'));
-        }
-        
-//        if ($container->has(BasePathHelper::class)) {
-//            $middleware->setBasePathHelper($container->get(BasePathHelper::class));
-//        }
-        
-        return $middleware;
+        return new BasePathViewHelper(
+            $container->get(BasePathHelper::class)
+        );
     }
-    
 }

@@ -2,6 +2,18 @@
 /*
  * SPDX-FileCopyrightText: 2024 Roland Rusch, easy-smart solution GmbH <roland.rusch@easy-smart.ch>
  * SPDX-License-Identifier: AGPL-3.0-only
+ *
+ * Copyright (c) 2024 Roland Rusch, easy-smart solution GmbH <roland.rusch@easy-smart.ch>
+ *
+ * This file is part of rugalib/ruga-baseurl, which is distributed under the terms
+ * of the GNU Affero General Public License v3.0 only. You should have received a copy of the AGPL 3.0
+ * License along with rugalib/ruga-baseurl. If not, see <https://spdx.org/licenses/AGPL-3.0-only.html>.
+ *
+ * ----------------------------------------------------------------------------
+ * Portions of the code are derived from Mateusz Tymek's work,
+ * which is licensed under unknown License. You can find the original work at:
+ * <https://github.com/mtymek/blast-base-url>
+ * ----------------------------------------------------------------------------
  */
 
 declare(strict_types=1);
@@ -13,24 +25,45 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+/**
+ * Class BaseurlMiddleware
+ *
+ * Middleware that detects the base URL and base path of the application and adds them as attributes to the
+ * incoming request. It also modifies the request URI path by removing the base URL, if present.
+ *
+ * @package YourPackageName
+ */
 class BaseurlMiddleware implements MiddlewareInterface
 {
     const BASE_URL = '_base_url';
     const BASE_PATH = '_base_path';
     
-    /** @var UrlHelper */
     private $urlHelper;
     
-    /** @var BasePathHelper  */
+    /** @var BasePathHelper */
     private $basePathHelper;
+    
+    
+    
+    public function setUrlHelper($urlHelper): void
+    {
+        $this->urlHelper = $urlHelper;
+    }
+    
+    
+    
+    public function setBasePathHelper(BasePathHelper $basePathHelper): void
+    {
+        $this->basePathHelper = $basePathHelper;
+    }
     
     
     
     private function findBaseUrl(array $serverParams, $uriPath)
     {
-        $filename       = $serverParams['SCRIPT_FILENAME'] ?? '';
-        $scriptName     = $serverParams['SCRIPT_NAME'] ?? null;
-        $phpSelf        = $serverParams['PHP_SELF'] ?? null;
+        $filename = $serverParams['SCRIPT_FILENAME'] ?? '';
+        $scriptName = $serverParams['SCRIPT_NAME'] ?? null;
+        $phpSelf = $serverParams['PHP_SELF'] ?? null;
         $origScriptName = $serverParams['ORIG_SCRIPT_NAME'] ?? null;
         
         if ($scriptName !== null && basename($scriptName) === $filename) {
@@ -44,11 +77,11 @@ class BaseurlMiddleware implements MiddlewareInterface
             // Backtrack up the SCRIPT_FILENAME to find the portion
             // matching PHP_SELF.
             
-            $baseUrl  = '/';
+            $baseUrl = '/';
             $basename = basename($filename);
             if ($basename) {
-                $path     = ($phpSelf ? trim($phpSelf, '/') : '');
-                $basePos  = strpos($path, $basename) ?: 0;
+                $path = ($phpSelf ? trim($phpSelf, '/') : '');
+                $basePos = strpos($path, $basename) ?: 0;
                 $baseUrl .= substr($path, 0, $basePos) . $basename;
             }
         }
@@ -88,6 +121,8 @@ class BaseurlMiddleware implements MiddlewareInterface
         return $baseUrl;
     }
     
+    
+    
     private function detectBasePath($serverParams, $baseUrl)
     {
         // Empty base url detected
@@ -107,6 +142,7 @@ class BaseurlMiddleware implements MiddlewareInterface
     }
     
     
+    
     /**
      * @inheritDoc
      */
@@ -115,7 +151,7 @@ class BaseurlMiddleware implements MiddlewareInterface
         $uri = $request->getUri();
         $uriPath = $uri->getPath();
         
-        $baseUrl  = $this->findBaseUrl($request->getServerParams(), $uriPath);
+        $baseUrl = $this->findBaseUrl($request->getServerParams(), $uriPath);
         $basePath = $this->detectBasePath($request->getServerParams(), $baseUrl);
         
         $request = $request->withAttribute(self::BASE_URL, $baseUrl);

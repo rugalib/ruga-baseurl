@@ -20,36 +20,26 @@ declare(strict_types=1);
 
 namespace Ruga\Baseurl;
 
-use Laminas\ServiceManager\Factory\InvokableFactory;
+use Laminas\View\Helper\AbstractHelper;
 
-/**
- * ConfigProvider.
- *
- * @see    https://docs.mezzio.dev/mezzio/v3/features/container/config/
- */
-class ConfigProvider
+class BasePathViewHelper extends AbstractHelper
 {
-    public function __invoke()
+    /** @var BasePathHelper */
+    private $basePathHelper;
+    
+    
+    
+    public function __construct(BasePathHelper $basePathHelper)
     {
-        return [
-            'dependencies' => [
-                'services' => [],
-                'aliases' => [],
-                'factories' => [
-                    BasePathHelper::class => InvokableFactory::class,
-                    BaseurlMiddleware::class => Container\BaseurlMiddlewareFactory::class,
-                ],
-                'invokables' => [],
-                'delegators' => [],
-            ],
-            'view_helpers' => [
-                'aliases' => [
-                    'basePath' => BasePathHelper::class,
-                ],
-                'factories' => [
-                    BasePathHelper::class => Container\BasePathViewHelperFactory::class,
-                ],
-            ],
-        ];
+        $this->basePathHelper = $basePathHelper;
     }
+    
+    
+    
+    public function __invoke($assetUrl = '')
+    {
+        $helper = $this->basePathHelper;
+        return $helper($assetUrl);
+    }
+    
 }
